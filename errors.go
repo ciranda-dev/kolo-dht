@@ -5,7 +5,7 @@ import "errors"
 var (
 	// ErrInvalidConfig means a Config field is out of range, here or in kolo-secure or kolo-transport (wrapped too).
 	ErrInvalidConfig = errors.New("kolodht: invalid config")
-	// ErrInvalidArgument means a nil or zero identity, an IPv6 address, IPv4-mapped included (v0.1.x is IPv4 only), a record that cannot be
+	// ErrInvalidArgument means a nil or zero identity, an IPv6 address, IPv4-mapped included (kolo-dht is IPv4 only), a record that cannot be
 	// used, or too many announcements.
 	ErrInvalidArgument = errors.New("kolodht: invalid argument")
 	// ErrClosed means the node is closed.

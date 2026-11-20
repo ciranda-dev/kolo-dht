@@ -449,7 +449,7 @@ func Peek(b []byte) (Type, uint64, bool) {
 }
 
 // PutAddr writes ap as IPv4 address (4 bytes) ‖ uvarint(port); any IPv6 address, IPv4-mapped included, is ErrInvalid
-// (v0.1.x is IPv4 only).
+// (kolo-dht is IPv4 only).
 func PutAddr(e *kolocodec.Encoder, ap netip.AddrPort) error {
 	ip := ap.Addr()
 	if !ip.Is4() || ap.Port() == 0 {

@@ -274,7 +274,7 @@ func TestEncodeRejects(t *testing.T) {
 	}
 }
 
-// TestIPv6Refused checks that v0.1.x is IPv4 only on the wire: no message encodes an IPv6 address, IPv4-mapped
+// TestIPv6Refused checks that kolo-dht is IPv4 only on the wire: no message encodes an IPv6 address, IPv4-mapped
 // included, in any address field.
 func TestIPv6Refused(t *testing.T) {
 	v6 := netip.MustParseAddrPort("[2001:db8::77]:4321")

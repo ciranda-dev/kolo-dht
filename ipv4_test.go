@@ -1,6 +1,6 @@
 package kolodht
 
-// Tests that v0.1.x is IPv4 only: every IPv6 address a caller passes, IPv4-mapped ones included, is refused with
+// Tests that kolo-dht is IPv4 only: every IPv6 address a caller passes, IPv4-mapped ones included, is refused with
 // ErrInvalidArgument.
 
 import (

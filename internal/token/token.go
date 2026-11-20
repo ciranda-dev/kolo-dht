@@ -69,7 +69,7 @@ func (s *Secret) Make(ap netip.AddrPort, now time.Time) [Size]byte {
 }
 
 // Check reports whether tok was made for ap with the current or the previous secret; an IPv6 ap, IPv4-mapped
-// included, never passes (v0.1.x is IPv4 only).
+// included, never passes (kolo-dht is IPv4 only).
 func (s *Secret) Check(ap netip.AddrPort, tok [Size]byte, now time.Time) bool {
 	if !ap.Addr().Is4() {
 		return false

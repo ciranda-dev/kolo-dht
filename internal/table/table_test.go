@@ -105,7 +105,7 @@ func TestDiversity(t *testing.T) {
 			t.Fatalf("bucket %d has %d from one /24", b, n)
 		}
 	}
-	// v0.1.x is IPv4 only: no IPv6 address enters the table.
+	// kolo-dht is IPv4 only: no IPv6 address enters the table.
 	for _, s := range []string{"[2001:db8:7::1]:4000", "[64:ff9b::cb00:7101]:4000", "[::1]:4000", "[::ffff:198.51.100.200]:4000"} {
 		if v, _ := tb.Insert(netip.MustParseAddrPort(s), 1, t0); v != Rejected {
 			t.Fatalf("Insert(%s) = %v, want Rejected", s, v)

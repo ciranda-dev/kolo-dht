@@ -109,7 +109,7 @@ func TestAllowedFrom(t *testing.T) {
 	}
 }
 
-// TestIPv6Refused checks that v0.1.x is IPv4 only: every IPv6 address, NAT64 and 6to4 included, is Invalid and
+// TestIPv6Refused checks that kolo-dht is IPv4 only: every IPv6 address, NAT64 and 6to4 included, is Invalid and
 // unusable, and has no host or group; so is an IPv4-mapped address.
 func TestIPv6Refused(t *testing.T) {
 	pub := netip.MustParseAddr("203.0.113.1")

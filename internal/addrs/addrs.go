@@ -1,4 +1,4 @@
-// Package addrs groups IPv4 addresses for limits and classifies their scope. v0.1.x is IPv4 only: any other address,
+// Package addrs groups IPv4 addresses for limits and classifies their scope. kolo-dht is IPv4 only: any other address,
 // an IPv4-mapped one included, is Invalid.
 package addrs
 

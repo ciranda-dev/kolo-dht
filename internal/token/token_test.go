@@ -32,7 +32,7 @@ func TestCheck(t *testing.T) {
 	}
 }
 
-// TestIPv4Only checks that v0.1.x is IPv4 only: no IPv6 address, IPv4-mapped included, passes a check.
+// TestIPv4Only checks that kolo-dht is IPv4 only: no IPv6 address, IPv4-mapped included, passes a check.
 func TestIPv4Only(t *testing.T) {
 	s := New(t0)
 	if s.Check(netip.MustParseAddrPort("[::ffff:203.0.113.7]:4000"), s.Make(a, t0), t0) {

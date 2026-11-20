@@ -165,7 +165,7 @@
   3 minutes for an announcing node (its next lookup) and 14 minutes for
   an idle one (40s into its next ping burst), and it takes at most 30
   minutes in any case.
-- What v0.1.x punches, checked end to end over the in-process NAT
+- What kolo-dht punches, checked end to end over the in-process NAT
   simulator (`internal/netsim`, RFC 4787 behaviors, with addresses from the
   RFC 2544 benchmarking range 198.18.0.0/15 and the documentation ranges)
   and not on real NATs. Consistent: public, full cone (EIM, EIF),

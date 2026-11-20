@@ -6,7 +6,7 @@ A real deployment runs a few servers (`Config.Server`) on public addresses, such
 
 ## NAT and address families
 
-Nothing relays application data, and there is no automatic fallback: a pair of NATs that cannot be punched (both mappings random) gives `ErrUnreachable`, and an application can opt in to relays: kolo-swarm's `Config.Relays` lists kolo-relays and dials through them when `Connect` fails. v0.1.x is IPv4 only: IPv6 input is refused with `ErrInvalidArgument`, the IPv4-mapped form `::ffff:a.b.c.d` included, and a datagram from an IPv6 source is dropped.
+Nothing relays application data, and there is no automatic fallback: a pair of NATs that cannot be punched (both mappings random) gives `ErrUnreachable`, and an application can opt in to relays: kolo-swarm's `Config.Relays` lists kolo-relays and dials through them when `Connect` fails. kolo-dht is IPv4 only: IPv6 input is refused with `ErrInvalidArgument`, the IPv4-mapped form `::ffff:a.b.c.d` included, and a datagram from an IPv6 source is dropped.
 
 ## API
 

@@ -169,7 +169,7 @@ func (n *Node) Stats() Stats {
 }
 
 // New opens a UDP socket on addr, such as "127.0.0.1:0" or ":4000", for the DHT and for kolo-secure connections as id.
-// v0.1.x is IPv4 only: an IPv6 addr, IPv4-mapped included, is ErrInvalidArgument.
+// kolo-dht is IPv4 only: an IPv6 addr, IPv4-mapped included, is ErrInvalidArgument.
 func New(ctx context.Context, addr string, id *koloid.Identity, cfg *Config) (*Node, error) {
 	if id.PublicKey() == nil {
 		return nil, fmt.Errorf("%w: nil or zero identity", ErrInvalidArgument)
@@ -213,7 +213,7 @@ func listenAddr(addr string) (string, error) {
 
 // errIPv6 is ErrInvalidArgument for an IPv6 address, IPv4-mapped included, given as what.
 func errIPv6(what string) error {
-	return fmt.Errorf("%w: IPv6 %s (IPv4-mapped included), and v0.1.x is IPv4 only", ErrInvalidArgument, what)
+	return fmt.Errorf("%w: IPv6 %s (IPv4-mapped included), and kolo-dht is IPv4 only", ErrInvalidArgument, what)
 }
 
 // newConn is New on a caller's socket, such as the network simulator's, with test timing; listen opens birthday
