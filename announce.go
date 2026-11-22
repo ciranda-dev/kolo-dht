@@ -72,7 +72,7 @@ func (n *Node) Announce(ctx context.Context, topic Topic) error {
 	case n.announces[topic] != nil:
 		n.mu.Unlock()
 		return nil
-	case len(n.announces) >= n.cfg.MaxAnnouncements:
+	case n.cfg.MaxAnnouncements > 0 && len(n.announces) >= n.cfg.MaxAnnouncements:
 		n.mu.Unlock()
 		return fmt.Errorf("%w: MaxAnnouncements reached", ErrInvalidArgument)
 	}

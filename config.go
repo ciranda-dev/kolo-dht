@@ -23,7 +23,7 @@ type Config struct {
 	MaxRecordsPerTopic int
 	// MaxRecordsPerIP caps the records from one announcing IPv4 address, all topics. Default 256, from 1 to 65536.
 	MaxRecordsPerIP int
-	// MaxAnnouncements caps the topics this node announces at once. Default 16, from 1 to 256.
+	// MaxAnnouncements caps the topics this node announces at once. Zero means no cap; negative is ErrInvalidConfig.
 	MaxAnnouncements int
 	// MaxInflight caps the requests waiting for a reply. Default 160, from 8 to 4096.
 	MaxInflight int
@@ -101,7 +101,6 @@ func (c *Config) withDefaults() (Config, error) {
 		{limit[int]{"MaxRecords", 65536, 16, 1_000_000}, &out.MaxRecords},
 		{limit[int]{"MaxRecordsPerTopic", 512, 1, 65536}, &out.MaxRecordsPerTopic},
 		{limit[int]{"MaxRecordsPerIP", 256, 1, 65536}, &out.MaxRecordsPerIP},
-		{limit[int]{"MaxAnnouncements", 16, 1, 256}, &out.MaxAnnouncements},
 		{limit[int]{"MaxInflight", 160, 8, 4096}, &out.MaxInflight},
 		{limit[int]{"MaxRelays", 64, 1, 4096}, &out.MaxRelays},
 		{limit[int]{"MaxPunches", 16, 1, 256}, &out.MaxPunches},
@@ -109,6 +108,9 @@ func (c *Config) withDefaults() (Config, error) {
 		{limit[int]{"MaxRandomPunches", 1, 1, 16}, &out.MaxRandomPunches},
 		{limit[int]{"MaxPunchSockets", socketDefault(softNoFile()), 1, 16384}, &out.MaxPunchSockets},
 		{limit[int]{"MaxRandomPunchesPerMinute", 4, 1, 64}, &out.MaxRandomPunchesPerMinute},
+	}
+	if out.MaxAnnouncements < 0 {
+		return Config{}, fmt.Errorf("%w: MaxAnnouncements must not be negative", ErrInvalidConfig)
 	}
 	for _, f := range ints {
 		if err := f.l.apply(f.v); err != nil {

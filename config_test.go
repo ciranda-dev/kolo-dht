@@ -21,7 +21,7 @@ func TestConfigDefaults(t *testing.T) {
 		t.Fatal(err)
 	}
 	want := Config{
-		MaxRecords: 65536, MaxRecordsPerTopic: 512, MaxRecordsPerIP: 256, MaxAnnouncements: 16,
+		MaxRecords: 65536, MaxRecordsPerTopic: 512, MaxRecordsPerIP: 256,
 		MaxInflight: 160, MaxRelays: 64, MaxPunches: 16,
 		MaxRequestsPerIP: 50, MaxRequestsPerPrefix: 200, MaxRequests: 10_000,
 		RequestTimeout: time.Second, PunchTimeout: 45 * time.Second,
@@ -42,7 +42,7 @@ func TestConfigRanges(t *testing.T) {
 		"MaxRecordsPerTopic":       {MaxRecordsPerTopic: 65537},
 		"MaxRecordsPerIP low":      {MaxRecordsPerIP: -1},
 		"MaxRecordsPerIP high":     {MaxRecordsPerIP: 65537},
-		"MaxAnnouncements":         {MaxAnnouncements: 257},
+		"MaxAnnouncements":         {MaxAnnouncements: -1},
 		"MaxInflight low":          {MaxInflight: 7},
 		"MaxInflight high":         {MaxInflight: 4097},
 		"MaxRelays":                {MaxRelays: 4097},
@@ -76,7 +76,8 @@ func TestConfigRanges(t *testing.T) {
 	}
 	good := []Config{
 		{MaxRecords: 16, MaxRecordsPerTopic: 1, MaxRecordsPerIP: 65536, MaxAnnouncements: 1, MaxInflight: 8, MaxRelays: 1, MaxPunches: 1},
-		{MaxRecords: 1_000_000, MaxRecordsPerTopic: 65536, MaxRecordsPerIP: 1, MaxAnnouncements: 256, MaxInflight: 4096, MaxRelays: 4096, MaxPunches: 256},
+		{MaxRecords: 1_000_000, MaxRecordsPerTopic: 65536, MaxRecordsPerIP: 1, MaxAnnouncements: 1 << 30, MaxInflight: 4096, MaxRelays: 4096, MaxPunches: 256},
+		{MaxAnnouncements: 257},
 		{MaxRequestsPerIP: 10_000, MaxRequestsPerPrefix: 100_000, MaxRequests: 1_000_000},
 		{MaxRequestsPerIP: 1, MaxRequestsPerPrefix: 1, MaxRequests: 1},
 		{RequestTimeout: 100 * time.Millisecond, PunchTimeout: 2 * time.Minute},
