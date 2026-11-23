@@ -4,6 +4,7 @@ package kolodht
 
 import (
 	"errors"
+	"math"
 	"net/netip"
 	"slices"
 	"sync"
@@ -46,6 +47,30 @@ func TestTopicPerNetwork(t *testing.T) {
 	}
 	if got := put(netip.MustParseAddrPort("198.51.100.1:4000")); got != records.Stored {
 		t.Fatalf("a host in another /24: %v", got)
+	}
+}
+
+// TestRecordSharesNoMaximum: MaxRecordsPerTopic and MaxRecordsPerIP take any positive value, and MaxRecords still bounds the store.
+func TestRecordSharesNoMaximum(t *testing.T) {
+	checkGoroutines(t)
+	cfg := fastConfig(true)
+	cfg.MaxRecords, cfg.MaxRecordsPerTopic, cfg.MaxRecordsPerIP = 16, math.MaxInt, 1<<20
+	s := loopNode(t, cfg)
+	topic, now := [32]byte{9}, time.Now()
+	stored := 0
+	for i := range 32 {
+		r, err := records.Sign(ident(t), topic, netip.AddrPortFrom(netip.MustParseAddr("203.0.113.1"), uint16(4000+i)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		s.mu.Lock()
+		if s.store.Put(r, now) == records.Stored {
+			stored++
+		}
+		s.mu.Unlock()
+	}
+	if stored != 16 {
+		t.Fatalf("stored %d records of one topic and one address, want MaxRecords (16)", stored)
 	}
 }
 

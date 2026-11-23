@@ -18,10 +18,10 @@ type Config struct {
 	// MaxRecords caps the records a server stores, all topics. Default 65536, from 16 to 1,000,000.
 	// A full store takes about MaxRecords x 710 bytes of heap, 44 MiB at the default.
 	MaxRecords int
-	// MaxRecordsPerTopic caps the records of one topic. Default 512, from 1 to 65536. One IPv4 /24 may hold a sixteenth
+	// MaxRecordsPerTopic caps the records of one topic. Default 512, at least 1; MaxRecords bounds it. One IPv4 /24 may hold a sixteenth
 	// of them (at least 1), so filling a topic takes 16 networks.
 	MaxRecordsPerTopic int
-	// MaxRecordsPerIP caps the records from one announcing IPv4 address, all topics. Default 256, from 1 to 65536.
+	// MaxRecordsPerIP caps the records from one announcing IPv4 address, all topics. Default 256, at least 1; MaxRecords bounds it.
 	MaxRecordsPerIP int
 	// MaxAnnouncements caps the topics this node announces at once. Zero means no cap; negative is ErrInvalidConfig.
 	MaxAnnouncements int
@@ -67,14 +67,16 @@ type Config struct {
 
 type limit[T int | time.Duration] struct {
 	name          string
-	def, min, max T
+	def, min, max T // a zero max has no upper bound
 }
 
 func (l limit[T]) apply(v *T) error {
 	switch {
 	case *v == 0:
 		*v = l.def
-	case *v < l.min || *v > l.max:
+	case l.max == 0 && *v < l.min:
+		return fmt.Errorf("%w: %s must be at least %v", ErrInvalidConfig, l.name, l.min)
+	case l.max != 0 && (*v < l.min || *v > l.max):
 		return fmt.Errorf("%w: %s must be between %v and %v", ErrInvalidConfig, l.name, l.min, l.max)
 	}
 	return nil
@@ -99,8 +101,8 @@ func (c *Config) withDefaults() (Config, error) {
 		v *int
 	}{
 		{limit[int]{"MaxRecords", 65536, 16, 1_000_000}, &out.MaxRecords},
-		{limit[int]{"MaxRecordsPerTopic", 512, 1, 65536}, &out.MaxRecordsPerTopic},
-		{limit[int]{"MaxRecordsPerIP", 256, 1, 65536}, &out.MaxRecordsPerIP},
+		{limit[int]{"MaxRecordsPerTopic", 512, 1, 0}, &out.MaxRecordsPerTopic},
+		{limit[int]{"MaxRecordsPerIP", 256, 1, 0}, &out.MaxRecordsPerIP},
 		{limit[int]{"MaxInflight", 160, 8, 4096}, &out.MaxInflight},
 		{limit[int]{"MaxRelays", 64, 1, 4096}, &out.MaxRelays},
 		{limit[int]{"MaxPunches", 16, 1, 256}, &out.MaxPunches},
