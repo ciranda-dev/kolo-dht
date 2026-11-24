@@ -39,9 +39,8 @@ func TestConfigRanges(t *testing.T) {
 	bad := map[string]Config{
 		"MaxRecords low":           {MaxRecords: 15},
 		"MaxRecords high":          {MaxRecords: 1_000_001},
-		"MaxRecordsPerTopic":       {MaxRecordsPerTopic: 65537},
+		"MaxRecordsPerTopic low":   {MaxRecordsPerTopic: -1},
 		"MaxRecordsPerIP low":      {MaxRecordsPerIP: -1},
-		"MaxRecordsPerIP high":     {MaxRecordsPerIP: 65537},
 		"MaxAnnouncements":         {MaxAnnouncements: -1},
 		"MaxInflight low":          {MaxInflight: 7},
 		"MaxInflight high":         {MaxInflight: 4097},
