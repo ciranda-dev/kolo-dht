@@ -35,8 +35,8 @@ Nothing relays application data, and there is no automatic fallback: a pair of N
   (`ErrNotStored` if none did). It refreshes the record every 15s and
   repeats the lookup every 5 minutes, until `Unannounce(topic)` or
   `Close`; the servers drop a record 20 minutes after its last refresh.
-  Announcing a topic again does nothing; past `MaxAnnouncements` it is
-  `ErrInvalidArgument`.
+  Announcing a topic again does nothing; past a `MaxAnnouncements` cap the
+  application set it is `ErrInvalidArgument`; by default there is no cap.
 - `(*Node).Lookup(ctx, topic) ([]Record, error)` returns the records of
   `topic` at the servers closest to it, each verified against its key and
   merged by key, freshest first, without the node's own record.

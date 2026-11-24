@@ -5,6 +5,7 @@ import (
 	"crypto/ecdh"
 	"crypto/rand"
 	"errors"
+	"fmt"
 	"net"
 	"net/netip"
 	"testing"
@@ -353,6 +354,22 @@ func TestAnnounceLimit(t *testing.T) {
 	b.Unannounce(topicOf("one"))
 	if err := b.Announce(ctx, topicOf("two")); err != nil {
 		t.Fatalf("after Unannounce: %v", err)
+	}
+}
+
+// TestAnnounceNoCapByDefault announces past the old default of 16 topics.
+func TestAnnounceNoCapByDefault(t *testing.T) {
+	checkGoroutines(t)
+	ctx := testCtx(t, 20*time.Second)
+	s := loopNode(t, fastConfig(true))
+	b := loopNode(t, fastConfig(false))
+	if err := b.Bootstrap(ctx, []netip.AddrPort{addrOf(s)}); err != nil {
+		t.Fatal(err)
+	}
+	for i := 0; i < 17; i++ {
+		if err := b.Announce(ctx, topicOf(fmt.Sprint("topic", i))); err != nil {
+			t.Fatalf("topic %d: %v", i, err)
+		}
 	}
 }
 
